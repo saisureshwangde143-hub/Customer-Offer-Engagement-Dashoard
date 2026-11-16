@@ -85,10 +85,8 @@ to the full customer base; leave it on for any demographic comparison.
 
 | Topic | Owner |
 | --- | --- |
-| Data refresh failures, source files | L1 |
-| Event parsing, funnel figures | L2 |
-| Segmentation and cohort definitions | L3 |
-| Offer performance, drill-through, tooltips | L4 |
-| Transaction analysis, QA validation | L5 |
-
-Replace the role codes with the Group 3 names before you submit.
+| Data refresh failures, source files | Sai Suresh Wangde |
+| Event parsing, funnel figures | Gaurav Thaware |
+| Segmentation and cohort definitions | Srikanth S |
+| Offer performance, drill-through, tooltips | M S Praveen |
+| Transaction analysis, QA validation | Nilanjan Chowdhury and Vipin Kumar |

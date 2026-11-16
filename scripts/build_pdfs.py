@@ -188,9 +188,11 @@ def build_user_guide():
 
     f.append(Spacer(1, 5))
     f.append(Paragraph(
-        "<b>Who to ask</b> &#8212; data refresh and source files: L1 &#183; event parsing and funnel figures: L2 &#183; "
-        "segmentation and cohorts: L3 &#183; offer performance and drill-through: L4 &#183; transaction analysis and QA: L5. "
-        "<i>Replace the role codes with the Group 3 names before submission.</i>", st["small"]))
+        "<b>Who to ask</b> &#8212; data refresh and source files: <b>Sai Suresh Wangde</b> &#183; "
+        "event parsing and funnel figures: <b>Gaurav Thaware</b> &#183; "
+        "segmentation and cohorts: <b>Srikanth S</b> &#183; "
+        "offer performance and drill-through: <b>M S Praveen</b> &#183; "
+        "transaction analysis and QA: <b>Nilanjan Chowdhury</b> and <b>Vipin Kumar</b>.", st["small"]))
 
     d.build(f)
     return path
