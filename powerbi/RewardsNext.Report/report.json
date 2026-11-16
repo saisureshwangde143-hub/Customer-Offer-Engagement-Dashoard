@@ -1,0 +1,91 @@
+{
+  "config": "{\"version\":\"5.55\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY24SU10\",\"version\":\"5.61\",\"type\":2}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"settings\":{\"useStylableVisualContainerHeader\":true,\"allowChangeFilterTypes\":true,\"useNewFilterPaneExperience\":true}}",
+  "layoutOptimization": 0,
+  "resourcePackages": [
+    {
+      "resourcePackage": {
+        "disabled": false,
+        "items": [
+          {
+            "name": "CY24SU10",
+            "path": "BaseThemes/CY24SU10.json",
+            "type": 202
+          }
+        ],
+        "name": "SharedResources",
+        "type": 2
+      }
+    }
+  ],
+  "sections": [
+    {
+      "config": "{}",
+      "displayName": "1 Overview",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720,
+      "name": "d1f0a2b4c6e8091a3b5c",
+      "ordinal": 0,
+      "visualContainers": [],
+      "width": 1280
+    },
+    {
+      "config": "{}",
+      "displayName": "2 Offer Funnel",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720,
+      "name": "e2a1b3c5d7f9102b4c6d",
+      "ordinal": 1,
+      "visualContainers": [],
+      "width": 1280
+    },
+    {
+      "config": "{}",
+      "displayName": "3 Customer Segmentation",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720,
+      "name": "f3b2c4d6e8a0213c5d7e",
+      "ordinal": 2,
+      "visualContainers": [],
+      "width": 1280
+    },
+    {
+      "config": "{}",
+      "displayName": "4 Offer Performance",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720,
+      "name": "a4c3d5e7f9b1324d6e8f",
+      "ordinal": 3,
+      "visualContainers": [],
+      "width": 1280
+    },
+    {
+      "config": "{}",
+      "displayName": "5 Transaction Behaviour",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720,
+      "name": "b5d4e6f8a0c2435e7f90",
+      "ordinal": 4,
+      "visualContainers": [],
+      "width": 1280
+    },
+    {
+      "config": "{}",
+      "displayName": "QA",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720,
+      "name": "c6e5f7a9b1d3546f8012",
+      "ordinal": 5,
+      "visualContainers": [],
+      "width": 1280
+    }
+  ],
+  "filters": "[]",
+  "pods": [],
+  "publicCustomVisuals": []
+}

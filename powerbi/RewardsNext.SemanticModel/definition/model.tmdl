@@ -1,0 +1,40 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+ref table Customers
+ref table Offers
+ref table BridgeOfferChannel
+ref table FactOfferDelivery
+ref table FactTransaction
+ref table DimTime
+ref table FunnelStages
+ref table '_Measures'
+
+ref cultureInfo en-US
+
+relationship Customers_FactOfferDelivery
+	fromColumn: FactOfferDelivery.customer_id
+	toColumn: Customers.customer_id
+
+relationship Customers_FactTransaction
+	fromColumn: FactTransaction.customer_id
+	toColumn: Customers.customer_id
+
+relationship Offers_FactOfferDelivery
+	fromColumn: FactOfferDelivery.offer_id
+	toColumn: Offers.offer_id
+
+relationship Offers_BridgeOfferChannel
+	crossFilteringBehavior: bothDirections
+	fromColumn: BridgeOfferChannel.offer_id
+	toColumn: Offers.offer_id
+
+relationship DimTime_FactTransaction
+	fromColumn: FactTransaction.txn_time
+	toColumn: DimTime.time_hour

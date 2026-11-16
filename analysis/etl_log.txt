@@ -1,0 +1,27 @@
+customers.csv raw rows: 17,000
+age placeholder 118 replaced with null: 2,175 rows
+gender missing: 2,175
+income missing: 2,175
+rows missing age AND gender AND income together: 2,175
+membership dates span 2013-07-29 to 2018-07-26
+offers: 10 ({'bogo': 4, 'discount': 4, 'informational': 2})
+offer-channel bridge rows: 33
+events.csv raw rows: 306,534
+offer events with unparsed offer_id: 0
+transaction events with null amount: 0
+orphan offer_ids in events: 0
+orphan customer_ids in events: 0
+event 'transaction': 138,953
+event 'offer received': 76,277
+event 'offer viewed': 57,725
+event 'offer completed': 33,579
+offer deliveries (fact rows): 76,277
+  viewed: 56,350
+  completed: 32,710
+  completed without viewing: 9,739
+views not attributable to an open window: 1,375
+completions not attributable to an open window: 869
+transactions: 138,953  total spend $1,775,452
+transactions inside an open offer window: 120,193
+transactions inside a VIEWED offer window: 108,054
+engagement segments: {'Champion': 8258, 'Occasional': 4436, 'Browser': 4183, 'Dormant': 117, 'Not Targeted': 6}

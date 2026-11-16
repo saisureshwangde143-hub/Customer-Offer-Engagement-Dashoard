@@ -1,0 +1,205 @@
+table '_Measures'
+
+	measure 'Offers Sent' = COUNTROWS ( FactOfferDelivery )
+		formatString: #,0
+		displayFolder: 1 Engagement
+
+	measure 'Offers Viewed' = CALCULATE ( COUNTROWS ( FactOfferDelivery ), FactOfferDelivery[was_viewed] = TRUE () )
+		formatString: #,0
+		displayFolder: 1 Engagement
+
+	measure 'Offers Completed' = CALCULATE ( COUNTROWS ( FactOfferDelivery ), FactOfferDelivery[was_completed] = TRUE () )
+		formatString: #,0
+		displayFolder: 1 Engagement
+
+	measure 'View Rate' = DIVIDE ( [Offers Viewed], [Offers Sent] )
+		formatString: 0.0%
+		displayFolder: 1 Engagement
+
+	/// Informational offers carry no spend threshold, so they can never be completed.
+	/// Leaving them in the denominator understates redemption by about 11 points.
+	measure 'Promotional Offers Sent' =
+			CALCULATE (
+			    COUNTROWS ( FactOfferDelivery ),
+			    FILTER ( ALL ( Offers[is_informational] ), Offers[is_informational] = FALSE () )
+			)
+		formatString: #,0
+		displayFolder: 1 Engagement
+
+	/// Expected on the full dataset: 53.6%
+	measure 'Redemption Rate' = DIVIDE ( [Offers Completed], [Promotional Offers Sent] )
+		formatString: 0.0%
+		displayFolder: 1 Engagement
+
+	/// Kept for the methodology slide only. Expected: 42.9%. Do not put this on a KPI card.
+	measure 'Redemption Rate (naive)' = DIVIDE ( [Offers Completed], [Offers Sent] )
+		formatString: 0.0%
+		displayFolder: 1 Engagement
+		isHidden
+
+	measure 'Influenced Completions' = CALCULATE ( COUNTROWS ( FactOfferDelivery ), FactOfferDelivery[viewed_before_completed] = TRUE () )
+		formatString: #,0
+		displayFolder: 2 Influence
+
+	/// Customers who met the spend threshold without ever opening the offer.
+	/// Expected on the full dataset: 9,739.
+	measure 'Unviewed Completions' = CALCULATE ( COUNTROWS ( FactOfferDelivery ), FactOfferDelivery[completed_unviewed] = TRUE () )
+		formatString: #,0
+		displayFolder: 2 Influence
+
+	measure 'Influenced Redemption Rate' = DIVIDE ( [Influenced Completions], [Promotional Offers Sent] )
+		formatString: 0.0%
+		displayFolder: 2 Influence
+
+	/// Expected on the full dataset: 29.8%
+	measure 'Unviewed Completion Share' = DIVIDE ( [Unviewed Completions], [Offers Completed] )
+		formatString: 0.0%
+		displayFolder: 2 Influence
+
+	measure 'Reward Cost' =
+			SUMX (
+			    FILTER ( FactOfferDelivery, FactOfferDelivery[was_completed] = TRUE () ),
+			    RELATED ( Offers[reward] )
+			)
+		formatString: \$#,0
+		displayFolder: 2 Influence
+
+	measure 'Wasted Reward Cost' =
+			SUMX (
+			    FILTER ( FactOfferDelivery, FactOfferDelivery[completed_unviewed] = TRUE () ),
+			    RELATED ( Offers[reward] )
+			)
+		formatString: \$#,0
+		displayFolder: 2 Influence
+
+	measure 'Wasted Reward %' = DIVIDE ( [Wasted Reward Cost], [Reward Cost] )
+		formatString: 0.0%
+		displayFolder: 2 Influence
+
+	measure 'Funnel Value' =
+			VAR Stage = SELECTEDVALUE ( FunnelStages[Stage] )
+			RETURN
+			    SWITCH (
+			        Stage,
+			        "1. Received", [Offers Sent],
+			        "2. Viewed", [Offers Viewed],
+			        "3. Completed", [Offers Completed]
+			    )
+		formatString: #,0
+		displayFolder: 3 Funnel
+
+	measure 'Funnel % of Received' = DIVIDE ( [Funnel Value], [Offers Sent] )
+		formatString: 0.0%
+		displayFolder: 3 Funnel
+
+	measure 'Avg Hours to View' = AVERAGE ( FactOfferDelivery[hours_to_view] )
+		formatString: 0.0
+		displayFolder: 3 Funnel
+
+	measure 'Avg Hours to Complete' = AVERAGE ( FactOfferDelivery[hours_to_complete] )
+		formatString: 0.0
+		displayFolder: 3 Funnel
+
+	/// Expected on the full dataset: $1,775,452
+	measure 'Total Spend' = SUM ( FactTransaction[amount] )
+		formatString: \$#,0
+		displayFolder: 4 Spend
+
+	measure 'Transactions' = COUNTROWS ( FactTransaction )
+		formatString: #,0
+		displayFolder: 4 Spend
+
+	/// Expected on the full dataset: $12.78
+	measure 'Avg Transaction' = AVERAGE ( FactTransaction[amount] )
+		formatString: \$#,0.00
+		displayFolder: 4 Spend
+
+	measure 'Spend in Viewed Offer Window' = CALCULATE ( [Total Spend], FactTransaction[in_viewed_offer_window] = TRUE () )
+		formatString: \$#,0
+		displayFolder: 4 Spend
+
+	measure 'Spend Outside Offer Window' = CALCULATE ( [Total Spend], FactTransaction[in_offer_window] = FALSE () )
+		formatString: \$#,0
+		displayFolder: 4 Spend
+
+	/// Expected: $12.90 - barely above the out-of-window figure. The honest null result.
+	measure 'Avg Transaction in Viewed Window' = CALCULATE ( [Avg Transaction], FactTransaction[in_viewed_offer_window] = TRUE () )
+		formatString: \$#,0.00
+		displayFolder: 4 Spend
+
+	/// Expected: $12.64
+	measure 'Avg Transaction Outside Window' = CALCULATE ( [Avg Transaction], FactTransaction[in_offer_window] = FALSE () )
+		formatString: \$#,0.00
+		displayFolder: 4 Spend
+
+	measure 'Spend per Customer' = DIVIDE ( [Total Spend], DISTINCTCOUNT ( FactTransaction[customer_id] ) )
+		formatString: \$#,0.00
+		displayFolder: 4 Spend
+
+	measure 'Customers' = DISTINCTCOUNT ( Customers[customer_id] )
+		formatString: #,0
+		displayFolder: 5 Segmentation
+
+	measure 'Targeted Customers' = DISTINCTCOUNT ( FactOfferDelivery[customer_id] )
+		formatString: #,0
+		displayFolder: 5 Segmentation
+
+	/// Weights every customer equally. [Redemption Rate] weights by offers received.
+	/// Label both clearly - they answer different questions.
+	measure 'Customer Redemption Rate' =
+			AVERAGEX (
+			    VALUES ( Customers[customer_id] ),
+			    CALCULATE ( DIVIDE ( [Offers Completed], [Promotional Offers Sent] ) )
+			)
+		formatString: 0.0%
+		displayFolder: 5 Segmentation
+
+	/// Expected on the full dataset: 87.2%
+	measure 'Profile Complete %' =
+			DIVIDE (
+			    CALCULATE ( [Customers], Customers[profile_complete] = TRUE () ),
+			    [Customers]
+			)
+		formatString: 0.0%
+		displayFolder: 5 Segmentation
+
+	measure 'Redemption Rate (complete profiles only)' = CALCULATE ( [Redemption Rate], Customers[profile_complete] = TRUE () )
+		formatString: 0.0%
+		displayFolder: 5 Segmentation
+
+	measure 'Offer Rank by Redemption' = RANKX ( ALL ( Offers[offer_label] ), [Redemption Rate],, DESC )
+		formatString: 0
+		displayFolder: 6 Labels
+
+	measure 'Best Offer Label' =
+			VAR T = TOPN ( 1, ALL ( Offers[offer_label] ), [Redemption Rate], DESC )
+			RETURN
+			    CONCATENATEX ( T, Offers[offer_label], ", " )
+		displayFolder: 6 Labels
+
+	measure 'KPI Subtitle' =
+			"Across " & FORMAT ( [Promotional Offers Sent], "#,0" ) & " promotional offers to "
+			    & FORMAT ( [Targeted Customers], "#,0" ) & " customers"
+		displayFolder: 6 Labels
+
+	measure 'QA Row Count Check' = IF ( [Offers Sent] = 76277, "PASS", "FAIL: " & FORMAT ( [Offers Sent], "#,0" ) )
+		displayFolder: 7 QA
+
+	measure 'QA Completion Check' = IF ( [Offers Completed] = 32710, "PASS", "FAIL: " & FORMAT ( [Offers Completed], "#,0" ) )
+		displayFolder: 7 QA
+
+	measure 'QA Spend Check' = IF ( ROUND ( [Total Spend], 0 ) = 1775452, "PASS", "FAIL: " & FORMAT ( [Total Spend], "#,0" ) )
+		displayFolder: 7 QA
+
+	column Value
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: [Value]
+		isHidden
+
+	partition '_Measures' = calculated
+		mode: import
+		source = ROW ( "Value", 1 )
+
+	annotation PBI_Id = MeasureTable

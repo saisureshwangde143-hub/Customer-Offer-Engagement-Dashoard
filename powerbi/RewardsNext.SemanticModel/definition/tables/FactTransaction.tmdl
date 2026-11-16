@@ -1,0 +1,62 @@
+table FactTransaction
+
+	column customer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column txn_time
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: txn_time
+
+	column amount
+		dataType: double
+		formatString: \$#,0.00
+		summarizeBy: sum
+		sourceColumn: amount
+
+	column day
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: day
+
+	column txn_id
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: txn_id
+
+	column in_offer_window
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: in_offer_window
+
+	column in_viewed_offer_window
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: in_viewed_offer_window
+
+	partition FactTransaction = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Users\Ravindra\Desktop\RewardsNext_Capstone\model\fact_transaction.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {
+				        {"customer_id", type text},
+				        {"txn_time", Int64.Type},
+				        {"amount", type number},
+				        {"day", Int64.Type},
+				        {"txn_id", Int64.Type},
+				        {"in_offer_window", type logical},
+				        {"in_viewed_offer_window", type logical}
+				    })
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

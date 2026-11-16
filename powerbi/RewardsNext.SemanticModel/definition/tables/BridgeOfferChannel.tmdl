@@ -1,0 +1,23 @@
+table BridgeOfferChannel
+
+	column offer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: offer_id
+
+	column channel
+		dataType: string
+		summarizeBy: none
+		sourceColumn: channel
+
+	partition BridgeOfferChannel = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Users\Ravindra\Desktop\RewardsNext_Capstone\model\bridge_offer_channel.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {{"offer_id", type text}, {"channel", type text}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

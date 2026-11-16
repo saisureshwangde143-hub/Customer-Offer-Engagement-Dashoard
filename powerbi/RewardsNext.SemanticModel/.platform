@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "RewardsNext"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7c1f4a92-5d3b-4e18-9a67-2f8c0b5d4e31"
+  }
+}

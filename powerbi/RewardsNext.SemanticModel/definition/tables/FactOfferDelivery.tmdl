@@ -1,0 +1,108 @@
+table FactOfferDelivery
+
+	column customer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column offer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: offer_id
+
+	column delivery_seq
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: delivery_seq
+
+	column received_at
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: received_at
+
+	column window_end
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: window_end
+
+	column viewed_at
+		dataType: double
+		summarizeBy: none
+		sourceColumn: viewed_at
+
+	column completed_at
+		dataType: double
+		summarizeBy: none
+		sourceColumn: completed_at
+
+	column was_viewed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: was_viewed
+
+	column was_completed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: was_completed
+
+	column viewed_before_completed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: viewed_before_completed
+
+	column completed_unviewed
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		summarizeBy: none
+		sourceColumn: completed_unviewed
+
+	column hours_to_view
+		dataType: double
+		formatString: 0.0
+		summarizeBy: average
+		sourceColumn: hours_to_view
+
+	column hours_to_complete
+		dataType: double
+		formatString: 0.0
+		summarizeBy: average
+		sourceColumn: hours_to_complete
+
+	column received_day
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: received_day
+
+	partition FactOfferDelivery = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\Users\Ravindra\Desktop\RewardsNext_Capstone\model\fact_offer_delivery.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+				    Typed = Table.TransformColumnTypes(Promoted, {
+				        {"customer_id", type text},
+				        {"offer_id", type text},
+				        {"delivery_seq", Int64.Type},
+				        {"received_at", Int64.Type},
+				        {"window_end", Int64.Type},
+				        {"viewed_at", type number},
+				        {"completed_at", type number},
+				        {"was_viewed", type logical},
+				        {"was_completed", type logical},
+				        {"viewed_before_completed", type logical},
+				        {"completed_unviewed", type logical},
+				        {"hours_to_view", type number},
+				        {"hours_to_complete", type number},
+				        {"received_day", Int64.Type}
+				    })
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

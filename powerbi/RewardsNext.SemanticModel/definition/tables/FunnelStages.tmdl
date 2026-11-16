@@ -1,0 +1,29 @@
+table FunnelStages
+
+	column Stage
+		dataType: string
+		summarizeBy: none
+		sourceColumn: Stage
+		sortByColumn: StageOrder
+
+	column StageOrder
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: StageOrder
+		isHidden
+
+	partition FunnelStages = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRecords({
+				        [Stage = "1. Received", StageOrder = 1],
+				        [Stage = "2. Viewed", StageOrder = 2],
+				        [Stage = "3. Completed", StageOrder = 3]
+				    }),
+				    Typed = Table.TransformColumnTypes(Source, {{"Stage", type text}, {"StageOrder", Int64.Type}})
+				in
+				    Typed
+
+	annotation PBI_ResultType = Table

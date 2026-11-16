@@ -1,0 +1,6 @@
+Flag,Count,Meaning
+Customers with placeholder age 118,"2,175","Same 2,175 rows also lack gender and income - one incomplete-profile cohort, not three separate gaps."
+Completions attributed to no open window,869,Completion fell outside the offer's validity window; excluded from journey facts.
+Views attributed to no open window,"1,375",Same cause. Both are <2% of their event type.
+Completions without a prior view,"9,739","Customer met the spend threshold without opening the offer - reward paid, no marketing influence."
+Informational offers,2 of 10,Cannot be 'completed'. Including them in the denominator understates redemption by ~9pp.

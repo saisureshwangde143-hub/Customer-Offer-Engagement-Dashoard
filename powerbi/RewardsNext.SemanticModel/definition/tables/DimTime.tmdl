@@ -1,0 +1,33 @@
+table DimTime
+
+	column time_hour
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: time_hour
+
+	column day
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: day
+
+	column week
+		dataType: int64
+		formatString: 0
+		summarizeBy: none
+		sourceColumn: week
+
+	partition DimTime = m
+		mode: import
+		source =
+				let
+				    Hours = {0..719},
+				    Converted = Table.FromList(Hours, Splitter.SplitByNothing(), {"time_hour"}),
+				    Typed = Table.TransformColumnTypes(Converted, {{"time_hour", Int64.Type}}),
+				    AddDay = Table.AddColumn(Typed, "day", each Number.IntegerDivide([time_hour], 24), Int64.Type),
+				    AddWeek = Table.AddColumn(AddDay, "week", each Number.IntegerDivide([day], 7) + 1, Int64.Type)
+				in
+				    AddWeek
+
+	annotation PBI_ResultType = Table
