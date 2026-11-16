@@ -6,6 +6,14 @@ Sai Suresh Wangde · Gaurav Thaware · Srikanth S · M S Praveen · Nilanjan Cho
 Analysis of 17,000 customers, 306,534 reward-programme events and 10 promotional offers across a
 30-day observation window, built into a Power BI dashboard with a parallel web version.
 
+### ▶ [**View the live dashboard**](https://saisureshwangde143-hub.github.io/Customer-Offer-Engagement-Dashoard/)
+
+Five interactive pages — overview, offer funnel, segmentation, offer performance and transaction
+behaviour — filterable by offer type, channel, age, income, gender and tenure. Nothing to install.
+
+> Clicking `dashboard/index.html` in the file list below shows you the *source*, not the dashboard.
+> GitHub never renders HTML from the repository view. Use the link above.
+
 ---
 
 ## Submission index
